@@ -1,7 +1,7 @@
 <html>
 <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
 <script type="text/javascript">
-	var peer = new Peer('host', {
+	var peer = new Peer('initiator', {
 		host: "splitscreen-server.herokuapp.com",
 		path: "/connector",
 		secure: true,
@@ -35,7 +35,7 @@
 		var conn = await peer.connect("peer");
 		conn.on('open', function () {
 			// here you have conn.id
-			conn.send('hi from the sender!');
+			conn.send('hi from the initiator!');
 	
 			conn.on('data', (data) => {
 				console.log("Received", data);
