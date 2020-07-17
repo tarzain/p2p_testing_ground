@@ -31,8 +31,8 @@
 		console.error("ERROR", error);
 	})
 
-	var connect = async () => {
-		var conn = await peer.connect("peer");
+	var connect = () => {
+		var conn = peer.connect("peer");
 		conn.on('open', function () {
 			// here you have conn.id
 			conn.send('hi from the initiator!');
