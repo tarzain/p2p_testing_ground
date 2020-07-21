@@ -15,10 +15,7 @@
 		});
         Array.prototype.forEach.call(document.getElementsByClassName("offline-disabled"), (el)=>{
             el.disabled = false;
-        })
-        // document.getElementsByClassName("offline").map((el)=>{
-        //     el.setAttribute('disabled', 'false');
-        // })
+        });
     }
 
 	signalClient.on('discover', async (allIDs) => {
@@ -37,7 +34,11 @@
 		const id = document.getElementById("recipient-id").value;
 		console.log("connecting to id: ", id);
 		try {
-			initializeConnection(await signalClient.connect(id));
+			initializeConnection(await signalClient.connect(id, 
+                { config: 
+                    { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' }] } 
+                }
+            ));
 			peer.send("hey I'm the initiator!");	
 		} catch (error) {
 			console.error(error);
