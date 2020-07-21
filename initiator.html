@@ -6,27 +6,27 @@
 		path: "/connector",
 		key: "peerjs",
 		secure: true,
-		// config: {
-		// 	"iceServers": [{
-		// 		"url": "stun:global.stun.twilio.com:3478?transport=udp",
-		// 		"urls": "stun:global.stun.twilio.com:3478?transport=udp"
-		// 	}, {
-		// 		"url": "turn:global.turn.twilio.com:3478?transport=udp",
-		// 		"username": "ed5ba9fe676a1cddf91915d4b75554aa5c73f11d0fe7d7794f3be2d90ee20c8d",
-		// 		"urls": "turn:global.turn.twilio.com:3478?transport=udp",
-		// 		"credential": "9L5dM3K7siVEeFv9BOSm3gMdGGHlGMJhj9ibBmhdhwc="
-		// 	}, {
-		// 		"url": "turn:global.turn.twilio.com:3478?transport=tcp",
-		// 		"username": "ed5ba9fe676a1cddf91915d4b75554aa5c73f11d0fe7d7794f3be2d90ee20c8d",
-		// 		"urls": "turn:global.turn.twilio.com:3478?transport=tcp",
-		// 		"credential": "9L5dM3K7siVEeFv9BOSm3gMdGGHlGMJhj9ibBmhdhwc="
-		// 	}, {
-		// 		"url": "turn:global.turn.twilio.com:443?transport=tcp",
-		// 		"username": "ed5ba9fe676a1cddf91915d4b75554aa5c73f11d0fe7d7794f3be2d90ee20c8d",
-		// 		"urls": "turn:global.turn.twilio.com:443?transport=tcp",
-		// 		"credential": "9L5dM3K7siVEeFv9BOSm3gMdGGHlGMJhj9ibBmhdhwc="
-		// 	}]
-		// }
+		config: {
+			"iceServers": [{
+				"url": "stun:global.stun.twilio.com:3478?transport=udp",
+				"urls": "stun:global.stun.twilio.com:3478?transport=udp"
+			}, {
+				"url": "turn:global.turn.twilio.com:3478?transport=udp",
+				"username": "ed5ba9fe676a1cddf91915d4b75554aa5c73f11d0fe7d7794f3be2d90ee20c8d",
+				"urls": "turn:global.turn.twilio.com:3478?transport=udp",
+				"credential": "9L5dM3K7siVEeFv9BOSm3gMdGGHlGMJhj9ibBmhdhwc="
+			}, {
+				"url": "turn:global.turn.twilio.com:3478?transport=tcp",
+				"username": "ed5ba9fe676a1cddf91915d4b75554aa5c73f11d0fe7d7794f3be2d90ee20c8d",
+				"urls": "turn:global.turn.twilio.com:3478?transport=tcp",
+				"credential": "9L5dM3K7siVEeFv9BOSm3gMdGGHlGMJhj9ibBmhdhwc="
+			}, {
+				"url": "turn:global.turn.twilio.com:443?transport=tcp",
+				"username": "ed5ba9fe676a1cddf91915d4b75554aa5c73f11d0fe7d7794f3be2d90ee20c8d",
+				"urls": "turn:global.turn.twilio.com:443?transport=tcp",
+				"credential": "9L5dM3K7siVEeFv9BOSm3gMdGGHlGMJhj9ibBmhdhwc="
+			}]
+		}
 	});
 	peer.on('error', (error)=>{
 		console.error("ERROR", error);
