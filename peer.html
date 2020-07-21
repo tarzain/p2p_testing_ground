@@ -1,51 +1,71 @@
 <html>
-<script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+<script src="https://splitscreen-server.herokuapp.com/socket.io/socket.io.js"></script>
+<script src="https://github.com/t-mullen/simple-signal/releases/latest/download/simple-signal-client.min.js"></script>
 <script type="text/javascript">
-    var peer = new Peer("peer", {
-        host: "splitscreen-server.herokuapp.com",
-        path: "/connector",
-        key: "peerjs",
-        secure: true,
-        config: {
-            "iceServers": [{
-                "url": "stun:global.stun.twilio.com:3478?transport=udp",
-                "urls": "stun:global.stun.twilio.com:3478?transport=udp"
-            }, {
-                "url": "turn:global.turn.twilio.com:3478?transport=udp",
-                "username": "ed5ba9fe676a1cddf91915d4b75554aa5c73f11d0fe7d7794f3be2d90ee20c8d",
-                "urls": "turn:global.turn.twilio.com:3478?transport=udp",
-                "credential": "9L5dM3K7siVEeFv9BOSm3gMdGGHlGMJhj9ibBmhdhwc="
-            }, {
-                "url": "turn:global.turn.twilio.com:3478?transport=tcp",
-                "username": "ed5ba9fe676a1cddf91915d4b75554aa5c73f11d0fe7d7794f3be2d90ee20c8d",
-                "urls": "turn:global.turn.twilio.com:3478?transport=tcp",
-                "credential": "9L5dM3K7siVEeFv9BOSm3gMdGGHlGMJhj9ibBmhdhwc="
-            }, {
-                "url": "turn:global.turn.twilio.com:443?transport=tcp",
-                "username": "ed5ba9fe676a1cddf91915d4b75554aa5c73f11d0fe7d7794f3be2d90ee20c8d",
-                "urls": "turn:global.turn.twilio.com:443?transport=tcp",
-                "credential": "9L5dM3K7siVEeFv9BOSm3gMdGGHlGMJhj9ibBmhdhwc="
-            }]
-        }
-    });
-    peer.on('connection', (conn) => {
-        conn.on('open', function () {
-            // Receive messages
-            conn.on('data', function (data) {
-                console.log('Received', data);
+	const socket = io('https://splitscreen-server.herokuapp.com/');
+    let peer = null;
 
-                // Send messages
-                conn.send('Hello from the peer!');
-                peer.disconnect();
-            });
+	const signalClient = new SimpleSignalClient(socket);
 
-        });
-    });
+    const initializeConnection = (connectionObj) => {
+        peer = connectionObj.peer;
+		peer.on('data', data => {
+			console.log("Received: ", data);
+			document.getElementById("chat-log").value += data + '\n';
+		});
+        Array.prototype.forEach.call(document.getElementsByClassName("offline-disabled"), (el)=>{
+            el.disabled = false;
+        })
+        // document.getElementsByClassName("offline").map((el)=>{
+        //     el.setAttribute('disabled', 'false');
+        // })
+    }
 
+	signalClient.on('discover', async (allIDs) => {
+		console.log("me!", signalClient.id);
+		document.getElementById('caller-id').value = signalClient.id;
+	});
 
+	signalClient.on('request', async (request) => {
+		initializeConnection(await request.accept()) // Accept the incoming request
+		peer.send("hey I'm the receiver!");
+	});
+
+	signalClient.discover();
+
+	var connect = async () => {
+		const id = document.getElementById("recipient-id").value;
+		console.log("connecting to id: ", id);
+		try {
+			initializeConnection(await signalClient.connect(id));
+			peer.send("hey I'm the initiator!");	
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
+    var sendMessage = () => {
+        const message = document.getElementById("chat-input").value;
+        peer.send(message);
+    }
 </script>
 
 <body>
+	<p>
+        <label>My ID:</label><input id="caller-id" type="text" disabled></input>
+    </p>
+    <p>
+        <label>Call:</label><input id="recipient-id" type="text" placeholder="Recipient ID:"></input>
+    </p>
+    <button onclick="connect();">Connect</button>
+    <p>
+        <label>Send:</label>
+        <input class="offline-disabled" id="chat-input" type="text" placeholder="Type a message here..." disabled></input>
+        <button class="offline-disabled" id="send-chat-btn" disabled onclick="sendMessage();">Send</button>
+    </p>
+	<textarea id="chat-log" rows=10 cols=100>
+
+	</textarea>
 </body>
 
 </html>
