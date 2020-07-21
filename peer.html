@@ -6,7 +6,7 @@
     let peer = null;
     let iceConfig = null;
 
-	const signalClient = new SimpleSignalClient(socket);
+	const signalClient = new SimpleSignalClient(socket, {connectionTimeout: 100000});
 
     const initializeConnection = (connectionObj) => {
         peer = connectionObj.peer;
