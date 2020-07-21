@@ -38,8 +38,9 @@
 		console.log("connecting to id: ", id);
 		try {
 			initializeConnection(await signalClient.connect(id, 
-                { config: 
-                    { iceServers: iceConfig }
+                {
+                    config: { iceServers: iceConfig },
+                    trickle: false,
                 }
             ));
 			peer.send("hey I'm the initiator!");	
