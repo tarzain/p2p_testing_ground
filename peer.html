@@ -2,8 +2,9 @@
 <script src="https://splitscreen-server.herokuapp.com/socket.io/socket.io.js"></script>
 <script src="https://github.com/t-mullen/simple-signal/releases/latest/download/simple-signal-client.min.js"></script>
 <script type="text/javascript">
-	const socket = io('https://splitscreen-server.herokuapp.com/');
+	const socket = io('http://localhost:9000');
     let peer = null;
+    let iceConfig = null;
 
 	const signalClient = new SimpleSignalClient(socket);
 
@@ -18,8 +19,10 @@
         });
     }
 
-	signalClient.on('discover', async (allIDs) => {
+	signalClient.on('discover', async (discoveryData) => {
 		console.log("me!", signalClient.id);
+        iceConfig = discoveryData;
+        console.log(iceConfig);
 		document.getElementById('caller-id').value = signalClient.id;
 	});
 
@@ -36,7 +39,7 @@
 		try {
 			initializeConnection(await signalClient.connect(id, 
                 { config: 
-                    { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' }] } 
+                    { iceServers: iceConfig }
                 }
             ));
 			peer.send("hey I'm the initiator!");	
