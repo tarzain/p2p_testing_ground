@@ -6,7 +6,7 @@
     let peer = null;
     let iceConfig = null;
 
-	const signalClient = new SimpleSignalClient(socket, {connectionTimeout: 100000});
+	const signalClient = new SimpleSignalClient(socket, {connectionTimeout: 10000});
 
     const initializeConnection = (connectionObj) => {
         peer = connectionObj.peer;
@@ -40,7 +40,7 @@
 			initializeConnection(await signalClient.connect(id, 
                 {
                     config: { iceServers: iceConfig },
-                    trickle: false,
+                    trickle: true,
                 }
             ));
 			peer.send("hey I'm the initiator!");	
