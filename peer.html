@@ -27,7 +27,10 @@
 	});
 
 	signalClient.on('request', async (request) => {
-		initializeConnection(await request.accept()) // Accept the incoming request
+		initializeConnection(await request.accept({}, {
+            config: { iceServers: iceConfig },
+            trickle: true,
+        })) // Accept the incoming request
 		peer.send("hey I'm the receiver!");
 	});
 
